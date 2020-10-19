@@ -12,7 +12,7 @@ LOOP_:	MVI A,FFH
 	MOV A,D
 	CPI 00H
 	JZ LOOP_	; while timer limit = 0, wait
-	ANI 00H	; initialize counter
+	ANI 00H		; initialize counter
 	CALL UP
 	CALL DOWN
 	JMP LOOP_
