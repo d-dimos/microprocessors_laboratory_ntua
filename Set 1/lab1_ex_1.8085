@@ -1,0 +1,72 @@
+; Microprocessors Laboratory - Flow Y [7th Semester]
+; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
+; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
+; Lab Exercise Set 1 - Exercise 1
+
+
+; main program
+	LXI B,0500H	; set delay to 1 sec
+LOOP_:	MVI A,FFH
+	STA 3000H	; output logical 0
+	CALL LIMIT	; D <- timer limit
+	MOV A,D
+	CPI 00H
+	JZ LOOP_	; while timer limit = 0, wait
+	ANI 00H	; initialize counter
+	CALL UP
+	CALL DOWN
+	JMP LOOP_
+	HLT
+
+; subroutine: D <- timer limit
+LIMIT:	PUSH PSW
+	LDA 2000H
+	ANI 0FH
+	MOV D,A
+	POP PSW
+	RET	
+ 
+; subroutine: waits till MSB = ON 
+SWITCH: PUSH PSW
+WAIT:	 LDA 2000H
+	 RAL
+	 JC OK
+	 JMP WAIT
+OK:	 POP PSW
+	 RET
+
+; subroutine: up counter
+UP:	CALL SWITCH
+	CALL SHOW
+	PUSH PSW
+	PUSH D
+	CALL DELB	; wait 1 sec
+	POP D
+	POP PSW
+	INR A		; count++
+	CMP D		; count = timer limit?
+	JNC UP_END
+	JMP UP
+UP_END: RET
+	
+; subroutine: down counter
+DOWN:	CALL SWITCH
+	CALL SHOW
+	PUSH PSW
+	PUSH D
+	CALL DELB	; wait 1 sec
+	POP D
+	POP PSW
+	DCR A		; count++
+	CPI 00H	; count = timer limit?
+	JZ DN_END
+	JMP DOWN
+DN_END: RET
+
+; subroutine: outputs counter
+SHOW:	CMA
+	STA 3000H	; show count
+	CMA
+	RET	
+	
+END
