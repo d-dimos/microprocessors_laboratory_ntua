@@ -27,7 +27,7 @@ LIMIT:	PUSH PSW
 	RET	
  
 ; subroutine: waits till MSB = ON 
-SWITCH: PUSH PSW
+SWITCH:  PUSH PSW
 WAIT:	 LDA 2000H
 	 RAL
 	 JC OK
