@@ -31,11 +31,7 @@ OK:	 POP PSW
 ; subroutine: up counter
 UP:	CALL SWITCH
 	CALL SHOW
-	PUSH PSW
-	PUSH D
 	CALL DELB	; wait 1 sec
-	POP D
-	POP PSW
 	INR A		; count++
 	CMP D		; count = timer limit?
 	JNC UP_END
@@ -45,11 +41,7 @@ UP_END: RET
 ; subroutine: down counter
 DOWN:	CALL SWITCH
 	CALL SHOW
-	PUSH PSW
-	PUSH D
 	CALL DELB	; wait 1 sec
-	POP D
-	POP PSW
 	DCR A		; count++
 	CPI 00H		; count = timer limit?
 	JZ DN_END
