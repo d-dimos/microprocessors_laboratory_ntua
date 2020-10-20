@@ -8,26 +8,19 @@
 	LXI B,0500H	; set delay to 1 sec
 LOOP_:	MVI A,FFH
 	STA 3000H	; output logical 0
-	CALL LIMIT	; D <- timer limit
-	MOV A,D
+	LDA 2000H	; read timer limit
+	ANI 0FH
 	CPI 00H
-	JZ LOOP_	; while timer limit = 0, wait
+	JZ LOOP_	; loop, while timer limit = 0
+	MOV D,A		; D <- timer limit
 	ANI 00H		; initialize counter
 	CALL UP
 	CALL DOWN
 	JMP LOOP_
 	HLT
-
-; subroutine: D <- timer limit
-LIMIT:	PUSH PSW
-	LDA 2000H
-	ANI 0FH
-	MOV D,A
-	POP PSW
-	RET	
- 
+	 
 ; subroutine: waits till MSB = ON 
-SWITCH:  PUSH PSW
+SWITCH: PUSH PSW
 WAIT:	 LDA 2000H
 	 RAL
 	 JC OK
