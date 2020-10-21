@@ -5,80 +5,66 @@
 
 
 ; main program		
-LXI B,014FH	; time delay
-
-BEGIN:	LDA 2000H
-	CALL MSB_CHECK
-	CALL LSB_CHECK
+MAIN:	LXI B,014FH	; time delay ~0.5 sec
+	LDA 2000H	; check input
+	CALL MSB	
+	CALL LSB
+	MVI A,01H	; initialize wagon
 	JMP LEFT
 
-LEFT2:	MOV A,E
-	RLC
-	JMP LEFT1
-
-LEFT:	MVI A,01H
+LEFT1:	RLC
 	
-LEFT1:	CALL DELB
-	CMA
-	STA 3000H
-	CMA
-	RLC
+LEFT:	CALL SHOW
 	CALL DELB
-	MOV E,A		; save A in E
+	RLC
+	MOV E,A	; save A in E
 	CALL MSB
 	CALL LSB_LATER1
 	
 	MOV A,D
 	CPI 01H
+	MOV A,E	; restore A
 	JZ RIGHT1
-	MOV A,E
-	ANI 80H
 	CPI 80H
 	JZ RIGHT
-	MOV A,E
-	JMP LEFT1
+	JMP LEFT
 
-RIGHT1:
-	MOV A,E
-	RRC
+RIGHT1: RRC
 		
-RIGHT:	CALL DELB
-	CMA 
-	STA 3000H
-	CMA
-	RRC
-	MOV E,A
+RIGHT:	CALL SHOW
 	CALL DELB
+	RRC
+	MOV E,A	; save A in E
 	CALL MSB 
 	CALL LSB_LATER1
+
 	MOV A,D
 	CPI 01H
-	JZ LEFT2
-	MOV A,E
-	ANI 01H
+	MOV A,E	; restore A
+	JZ LEFT1
 	CPI 01H
 	JZ LEFT
-	MOV A,E
 	JMP RIGHT
 	
-MSB_CHECK:	
+; checks MSB	
 MSB:	LDA 2000H
 	ANI 80H
 	CPI 80H	
 	JNZ MSB		; wait until MSB is ON
 	RET
 
-LSB_CHECK:
+; checks LSB (only for the start)
 LSB:	LDA 2000H
 	ANI 01H
 	CPI 01H
 	JNZ LSB		; wait until LSB is ON
 	RET
 
-LSB_LATER1:	LDA 2000H
+; checks LSB (main subroutine)
+LSB_LATER1:	MVI D,00H
+		LDA 2000H
 		ANI 01H
 		CPI 01H
-		MVI D,00H
 		JZ OK1
 		JMP LSB_LATER2
 OK1:		RET
@@ -87,6 +73,13 @@ LSB_LATER2:	LDA 2000H
 		ANI 01H
 		CPI 01H
 		JNZ LSB_LATER2
-		MVI D,01H	; LSB was OFF
+		MVI D,01H
 		RET
+
+; shows output
+SHOW:	CMA
+	STA 3000H
+	CMA
+	RET
+
 END
