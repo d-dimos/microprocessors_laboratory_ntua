@@ -1,45 +1,20 @@
-MSB_CHECK:	
-MSB:		LDA 2000H
-		ANI 80H
-		CPI 80H	
-		JNZ MSB	;wait until MSB is ON
-		RET
+; Microprocessors Laboratory - Flow Y [7th Semester]
+; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
+; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
+; Lab Exercise Set 1 - Exercise 3
 
-LSB_CHECK:
-LSB:		LDA 2000H
-		ANI 01H
-		CPI 01H
-		JNZ LSB	;wait until LSB is ON
-		RET
 
-LSB_LATER1:	LDA 2000H
-		ANI 01H
-		CPI 01H
-		MVI D,00H
-		JZ OK1
-		JMP LSB_LATER2
-		
-OK1:	RET
-
-LSB_LATER2:	LDA 2000H
-		ANI 01H
-		CPI 01H
-		JNZ LSB_LATER2
-		MVI D,01H	;LSB WAS OFF
-		RET
-		
-LXI B,014FH	;time delay
+; main program		
+LXI B,014FH	; time delay
 
 BEGIN:	LDA 2000H
 	CALL MSB_CHECK
 	CALL LSB_CHECK
 	JMP LEFT
 
-
 LEFT2:	MOV A,E
 	RLC
 	JMP LEFT1
-
 
 LEFT:	MVI A,01H
 	
@@ -49,7 +24,7 @@ LEFT1:	CALL DELB
 	CMA
 	RLC
 	CALL DELB
-	MOV E,A	;save A in E
+	MOV E,A		; save A in E
 	CALL MSB
 	CALL LSB_LATER1
 	
@@ -85,4 +60,33 @@ RIGHT:	CALL DELB
 	JZ LEFT
 	MOV A,E
 	JMP RIGHT
+	
+MSB_CHECK:	
+MSB:	LDA 2000H
+	ANI 80H
+	CPI 80H	
+	JNZ MSB		; wait until MSB is ON
+	RET
+
+LSB_CHECK:
+LSB:	LDA 2000H
+	ANI 01H
+	CPI 01H
+	JNZ LSB		; wait until LSB is ON
+	RET
+
+LSB_LATER1:	LDA 2000H
+		ANI 01H
+		CPI 01H
+		MVI D,00H
+		JZ OK1
+		JMP LSB_LATER2
+OK1:		RET
+
+LSB_LATER2:	LDA 2000H
+		ANI 01H
+		CPI 01H
+		JNZ LSB_LATER2
+		MVI D,01H	; LSB was OFF
+		RET
 END
