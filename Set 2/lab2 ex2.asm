@@ -8,19 +8,19 @@ rjmp reset
 .org 0x4     ;addr of INT1 is at 0x4
 rjmp ISR1
 
-reset: 		ldi r24 ,( 1 << ISC11) | ( 1 << ISC10)
-		out MCUCR , r24 
-		ldi r24 ,( 1 << INT1) ; INT1 is allowed
-		out GICR , r24
-		sei
+reset: 	ldi r24 ,( 1 << ISC11) | ( 1 << ISC10)
+	out MCUCR , r24 
+	ldi r24 ,( 1 << INT1) ; INT1 is allowed
+	out GICR , r24
+	sei
 
-IO_set:		ser r24 ; initialize PORTC
-		out DDRC, r24 ; for output
-		clr r24 ; initialize PORTA
-		out DDRC, r24	;for input when INT1 occures
+IO_set:	ser r24 ; initialize PORTC
+	out DDRC, r24 ; for output
+	clr r24 ; initialize PORTA
+	out DDRC, r24	;for input when INT1 occures
 
 
-main_program: 	out PORTC , r26 ; show counter at PORTC
+main_program: 	  out PORTC , r26 ; show counter at PORTC
 		  inc r26 ; increase counter
   		  rjmp main_program ; loop
 
