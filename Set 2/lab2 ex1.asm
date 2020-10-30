@@ -1,3 +1,12 @@
+  
+; Microprocessors Laboratory - Flow Y [7th Semester]
+; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
+; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
+; Lab Exercise Set 2 - Exercise 1
+
+
+
+
 .include "m16def.inc"
 stack: ldi r24 , low(RAMEND) ; initialize stack pointer
 out SPL , r24
