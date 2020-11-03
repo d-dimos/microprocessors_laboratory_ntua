@@ -5,8 +5,6 @@
 ; Lab Exercise Set 2 - Exercise 1
 
 
-
-
 include "m16def.inc"
 .DEF A = r16
 .DEF B = r17
