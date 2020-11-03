@@ -4,6 +4,8 @@
 ; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
 ; Lab Exercise Set 2 - Exercise 2
 
+.include "m16def.inc"
+.org 0x0
 rjmp reset
 .org 0x4     ;addr of INT1 is at 0x4
 rjmp ISR1
@@ -15,9 +17,9 @@ reset: 	ldi r24 ,( 1 << ISC11) | ( 1 << ISC10)
 	sei
 
 IO_set:	ser r24 ; initialize PORTC
-	out DDRC, r24 ; for output
+	out PORTC, r24 ; for output
 	clr r24 ; initialize PORTA
-	out DDRC, r24	;for input when INT1 occures
+	out PORTA, r24	;for input when INT1 occures
 
 
 main_program: 	  out PORTC , r26 ; show counter at PORTC
