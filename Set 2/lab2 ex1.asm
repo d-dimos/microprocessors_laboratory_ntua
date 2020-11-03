@@ -17,9 +17,9 @@ stack: ldi r24 , low(RAMEND)
 	out SPH , r24
 
 IO_set: ser r24 ; initialize PORTB
-	      out DDRB, r24 ; for output
-	      clr r24 ; initialize PORTC
-	      out DDRC, r24 ; for input
+	out DDRB, r24 ; for output
+	clr r24 ; initialize PORTC
+	out DDRC, r24 ; for input
 
 main: clr F ; ready F
 	in T, PINC ; T <-- input
