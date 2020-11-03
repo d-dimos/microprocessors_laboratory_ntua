@@ -1,11 +1,4 @@
-  
-; Microprocessors Laboratory - Flow Y [7th Semester]
-; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
-; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
-; Lab Exercise Set 2 - Exercise 1
-
-
-include "m16def.inc"
+.include "m16def.inc"
 .DEF A = r16
 .DEF B = r17
 .DEF C = r18
@@ -16,10 +9,10 @@ stack: ldi r24 , low(RAMEND)
 out SPL , r24
 ldi r24 , high(RAMEND)
 out SPH , r24
-IO_set: ser r24 ; initialize PORTA
-out DDRA, r24 ; for output
+IO_set: ser r24 ; initialize PORTB
+out DDRB, r24 ; for output
 clr r24 ; initialize PORTC
-out DDRB, r24 ; for input
+out DDRC, r24 ; for input
 main: clr F ; ready F
 in T, PINB ; T <-- input
 mov A, T ; LSB(A) = A
