@@ -19,7 +19,7 @@ out DDRB, r24 ; for output
 clr r24 ; initialize PORTC
 out DDRC, r24 ; for input
 main: clr F ; ready F
-in T, PINB ; T <-- input
+in T, PINC ; T <-- input
 mov A, T ; LSB(A) = A
 lsr T
 mov B, T ; LSB(B) = B
@@ -44,5 +44,5 @@ and A, B ; LSB(A) = (A + C)(B + D) <---
 lsl A ; A1 = (A + C)(B + D)
 andi A, 2 ; A = F1
 andi F, 1 ; F = F0or F, A ; F = F + A = OUTPUT
-out PORTA, F
+out PORTB, F
 rjmp main
