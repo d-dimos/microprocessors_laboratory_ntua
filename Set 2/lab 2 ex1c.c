@@ -8,7 +8,8 @@ unsigned char x,F0,A,B,C,D,F1;
 
 int main(void)
 {
-		DDRC = 0xff;	//PORTC->output		DDRB = 0x00;	//PORTB ->input
+		DDRC = 0xff;	// PORTC->output
+		DDRB = 0x00;	// PORTB ->input
 	
     while (1) 
     {
