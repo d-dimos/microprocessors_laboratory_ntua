@@ -1,7 +1,7 @@
 ; Microprocessors Laboratory - Flow Y [7th Semester]
 ; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
 ; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
-; Lab Exercise Set 2 - Exercise 1
+; Lab Exercise Set 2 - Exercise 1 - Assembly
 
 .include "m16def.inc"
 .DEF A = r16
