@@ -24,7 +24,7 @@ IO_set:	ser r24 	;initialize PORTC
 
 main_program: out PORTC , r26   ;show counter at PORTC
 	      inc r26           ;increase counter
-  	      rjmp main_program ;oop
+  	      rjmp main_program ;loop
 
 
 ISR1:	in r21,PINA	;load PINA
