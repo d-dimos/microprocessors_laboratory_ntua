@@ -1,0 +1,79 @@
+; exercise 1
+
+; subroutines 
+
+CHECK1:		;έλεγχος εάν το MSB είναι ON στην αρχή
+	LDA 2000H
+	ANI 80H
+	CPI 80H
+	JNZ CHECK1
+	MOV A,E
+	RET
+CHECK:			;έλεγχος εάν το MSB είναι ON κατά την μέτρηση
+	LDA 2000H
+	MOV E,A
+	ANI 80H
+	CPI 80H
+	JNZ CHECK
+	RET
+
+
+LXI B,208AH	;delay = 1sec
+BEGIN:
+	MVI A,FFH
+	STA 3000H
+	CALL CHECK
+	MOV A,E	;επαναφορά της εισόδου
+	ANI 0FH	;απομόνωση των 4 LSB
+	MOV D,A	;αποθήκευση της εισόδου(4 LSB) στον καραχωρητή D
+	MVI E,00H
+
+; Μέτρηση ’νω
+MVI A,00H
+COUNT_UP:
+	CALL CHECK1	;έλεγχος εά το MSB έιναι ON
+	CMP D
+	JZ COUNT_D	;έλεγχος εάν τελείωσε η άνω μέτρηση
+	CMA 
+	STA 3000H
+	CMA
+	CALL DELB
+	INR A		;άυξησε τον μετρητή
+	MOV E,A
+	JMP COUNT_UP
+
+
+	
+;======= Μέτρηση Κάτω ==========
+
+COUNT_D: MOV E,D
+COUNT_DOWN:
+	CALL CHECK1
+	JMP CHANGE
+CONT:	MOV A,D
+	CPI 00H
+	JZ END		;έλεγχος εάν τελείωσε η άνω μέτρηση
+	CMA 
+	STA 3000H
+	CALL DELB
+	CMA 
+	DCR D		;μείωσε τον μετρητή
+	JMP COUNT_DOWN
+
+;========== Έλεγχος εάν έχει αλλάξει η είσοδος των 4 MSB =========
+	
+CHANGE:
+	LDA 2000H
+	CMP E		;σύγκριση εάν έχει αλλάξει η είσοδος
+	JZ CONT	;εάν όχι συνεχίζει η μέτρηση κανονικά
+	MOV A,D	;έλεγχος εάν η μέτρηση έχει φτάσει στο 0
+	CPI 00H
+	JNZ CONT
+	JMP BEGIN
+	
+END:
+	MVI A,00H
+	CMA
+	STA 3000H
+	END
+

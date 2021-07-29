@@ -1,0 +1,66 @@
+; Microprocessors Laboratory - Flow Y [7th Semester]
+; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
+; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
+; Lab Exercise Set 1 - Exercise 2
+
+
+; main program
+MAIN:	IN 10H		; remove memory protection
+	LXI H,0A05H	
+	MVI B,03H	; iterate over B
+LP:	MVI M,10H	; store "space" (= '10H')
+	DCX H
+	DCR B
+	JNZ LP		; repeat 3 times
+	LXI H,0A00H
+	CALL KIND	; A <- x
+	CALL MUL16	; A <- 16x
+	PUSH PSW	; x -> stack
+	CALL KIND	; A <- y
+	POP B		; B <- 16x
+	ADD B		; A = 16x + y
+	CALL DIV10	; decical byte 0 -> B
+	MOV M,B
+	INX H
+	CALL DIV10	; decimal byte 1 -> B, decimal byte 2 -> A
+	MOV M,B
+	INX H
+	MOV M,A	
+	CALL SHOW
+	JMP MAIN
+	HLT
+
+; subroutine: multiplies A with 16
+MUL16:	MVI C,10H	
+	MOV B,A	; B <- x
+	ANI 00H	; initialize A
+MUL:	ADD B
+	DCR C
+	JNZ MUL
+	RET
+
+; subroutine: divide A by 10 (A <- div, B <- mod)
+DIV10:	MVI B,00H	; initialize div
+DIV:	CPI 0AH	; A - 10 > 0
+	JC ENDV	; if yes -> stop division
+	SUI 0AH
+	CALL SWAP
+	ADI 01H
+	CALL SWAP
+	JMP DIV
+ENDV:	CALL SWAP
+	RET
+
+; subroutine: [0A00 - 0A05] -> 7-seg display
+SHOW:	LXI D,0A00H
+	CALL STDM
+	CALL DCD
+	RET
+
+;subroutine: swaps A <-> B
+SWAP:	PUSH B
+	MOV B,A
+	POP PSW
+	RET
+	
+END

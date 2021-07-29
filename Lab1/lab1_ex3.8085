@@ -1,0 +1,85 @@
+; Microprocessors Laboratory - Flow Y [7th Semester]
+; Abatzi Nafsika - 031 17 198 - nafsika.abatzi@gmail.com
+; Dimos Dimitris - 031 17 165 - dimitris.dimos647@gmail.com
+; Lab Exercise Set 1 - Exercise 3
+
+
+; main program		
+MAIN:	LXI B,014FH	; time delay ~0.5 sec
+	LDA 2000H	; check input
+	CALL MSB	
+	CALL LSB
+	MVI A,01H	; initialize wagon
+	JMP LEFT
+
+LEFT1:	RLC
+	
+LEFT:	CALL SHOW
+	CALL DELB
+	RLC
+	MOV E,A	; save A in E
+	CALL MSB
+	CALL LSB_LATER1
+	
+	MOV A,D
+	CPI 01H
+	MOV A,E	; restore A
+	JZ RIGHT1
+	CPI 80H
+	JZ RIGHT
+	JMP LEFT
+
+RIGHT1: RRC
+		
+RIGHT:	CALL SHOW
+	CALL DELB
+	RRC
+	MOV E,A	; save A in E
+	CALL MSB 
+	CALL LSB_LATER1
+
+	MOV A,D
+	CPI 01H
+	MOV A,E	; restore A
+	JZ LEFT1
+	CPI 01H
+	JZ LEFT
+	JMP RIGHT
+	
+; checks MSB	
+MSB:	LDA 2000H
+	ANI 80H
+	CPI 80H	
+	JNZ MSB		; wait until MSB is ON
+	RET
+
+; checks LSB (only for the start)
+LSB:	LDA 2000H
+	ANI 01H
+	CPI 01H
+	JNZ LSB		; wait until LSB is ON
+	RET
+
+; checks LSB (main subroutine)
+LSB_LATER1:	MVI D,00H
+		LDA 2000H
+		ANI 01H
+		CPI 01H
+		JZ OK1
+		JMP LSB_LATER2
+OK1:		RET
+
+LSB_LATER2:	LDA 2000H
+		ANI 01H
+		CPI 01H
+		JNZ LSB_LATER2
+		MVI D,01H
+		RET
+
+; shows output
+SHOW:	CMA
+	STA 3000H
+	CMA
+	RET
+
+END
